@@ -22,38 +22,73 @@ const ctx = canvas.getContext('2d');
 //     ctx.stroke();
 // };
 
+class Circle {
+    constructor(posx, posy, dx, dy, rad, color) {
+        this.posx = posx; 
+        this.posy = posy;
 
-const circleInfo = {
-    posx: Math.random() * innerWidth, 
-    posy: Math.random() * innerHeight,
+        this.dx = dx;
+        this.dy = dy; 
 
-    dx: (Math.random() - 0.5) * 10,
-    dy: (Math.random() - 0.5) * 10, 
+        this.rad = rad;
 
-    rad: 30,
+        this.color = color;
+    };
+
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.posx, this.posy, this.rad, 0, Math.PI * 2, false);
+
+
+        ctx.fillStyle = this.color;
+        ctx.strokeStyle = this.color; 
+        
+        ctx.fill()
+        ctx.stroke();
+    };
+
+    update() {
+        if (this.posx + this.rad > innerWidth || this.posx - this.rad < 0) {
+            this.dx = -this.dx;
+        }; 
+
+        if (this.posy + this.rad > innerHeight || this.posy - this.rad < 0) {
+            this.dy = -this.dy;
+        };
+
+        this.posx += this.dx;
+        this.posy += this.dy;
+        console.log('Animate: OK')
+
+        this.draw();
+    };
 };
+
+const circleArray = [];
+
+for (let i = 0; i < 50; i++) {
+    let rad = 30; 
+    let speed = 10;
+
+    let x = Math.random() * (innerWidth - rad * 2) + rad;
+    let y = Math.random() * (innerHeight - rad * 2) + rad; 
+    let dx = (Math.random() - 0.5) * speed; 
+    let dy = (Math.random() - 0.5) * speed;
+
+    const colorArray = ['#EAC435', '#345995', '#03CEA4', '#FB4D3D', '#CA1551'];
+    const currColor = colorArray[Math.floor(Math.random() * colorArray.length)];
+
+    circleArray.push(new Circle(x, y, dx, dy, rad, currColor))
+};
+
 
 const animate = () => {
     requestAnimationFrame(animate);
-    ctx.clearRect(0, 0, innerWidth, innerHeight)
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
 
-    ctx.beginPath();
-    ctx.arc(circleInfo.posx, circleInfo.posy, circleInfo.rad, 0, Math.PI * 2, false);
-    ctx.strokeStyle = 'black';
-    ctx.stroke(); 
-
-    
-    if (circleInfo.posx + circleInfo.rad > innerWidth || circleInfo.posx - circleInfo.rad < 0) {
-        circleInfo.dx = -circleInfo.dx;
-    }; 
-
-    if (circleInfo.posy + circleInfo.rad > innerHeight || circleInfo.posy - circleInfo.rad < 0) {
-        circleInfo.dy = -circleInfo.dy;
+    for(let i = 0; i < circleArray.length; i++) {
+        circleArray[i].update();
     };
-
-    circleInfo.posx += circleInfo.dx;
-    circleInfo.posy += circleInfo.dy;
-    console.log('Animate: OK')
 };
 
 animate();
