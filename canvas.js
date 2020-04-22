@@ -22,15 +22,34 @@ const ctx = canvas.getContext('2d');
 //     ctx.stroke();
 // };
 
+const mouse = {
+    x: undefined, 
+    y: undefined,
+};
+
+window.addEventListener('mousemove', (e) => {
+    mouse.x = event.x;
+    mouse.y = event.y; 
+});
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    init();
+});
+
 class Circle {
-    constructor(posx, posy, dx, dy, rad, color) {
+    constructor(posx, posy, dx, dy, minRad, maxRad, color) {
         this.posx = posx; 
         this.posy = posy;
 
         this.dx = dx;
         this.dy = dy; 
-
-        this.rad = rad;
+        
+        this.rad = minRad;
+        this.minRad = minRad; 
+        this.maxRad = maxRad;
 
         this.color = color;
     };
@@ -58,29 +77,49 @@ class Circle {
 
         this.posx += this.dx;
         this.posy += this.dy;
-        console.log('Animate: OK')
+        // console.log('Animate: OK')
+
+        // interactivity // 
+        if (mouse.x - this.posx < 125 && mouse.x - this.posx > -125 && 
+            mouse.y - this.posy < 125 && mouse.y - this.posy > -125
+            ) {
+                if (this.rad < this.maxRad) {
+                    this.rad += 1; 
+                }
+
+        } else if (this.rad > this.minRad) {
+            this.rad -= 1;
+        };
 
         this.draw();
     };
 };
 
-const circleArray = [];
+let circleArray = [];
 
-for (let i = 0; i < 50; i++) {
-    let rad = 30; 
-    let speed = 10;
+const init = () => {
+    circleArray = [];
 
-    let x = Math.random() * (innerWidth - rad * 2) + rad;
-    let y = Math.random() * (innerHeight - rad * 2) + rad; 
-    let dx = (Math.random() - 0.5) * speed; 
-    let dy = (Math.random() - 0.5) * speed;
+    for (let i = 0; i < 500; i++) {
+        let rad = 30;
+        let speed = 3;
 
-    const colorArray = ['#EAC435', '#345995', '#03CEA4', '#FB4D3D', '#CA1551'];
-    const currColor = colorArray[Math.floor(Math.random() * colorArray.length)];
+        let x = Math.random() * (innerWidth - rad * 2) + rad;
+        let y = Math.random() * (innerHeight - rad * 2) + rad;
+        let dx = (Math.random() - 0.5) * speed;
+        let dy = (Math.random() - 0.5) * speed;
 
-    circleArray.push(new Circle(x, y, dx, dy, rad, currColor))
+        let minRad = Math.floor(Math.random() * 7 + 1);
+        let maxRad = 85;
+
+        const colorArray = ['#EAC435', '#345995', '#03CEA4', '#FB4D3D', '#CA1551'];
+        const currColor = colorArray[Math.floor(Math.random() * colorArray.length)];
+
+        circleArray.push(new Circle(x, y, dx, dy, minRad, maxRad, currColor))
+    };
 };
 
+init();
 
 const animate = () => {
     requestAnimationFrame(animate);
