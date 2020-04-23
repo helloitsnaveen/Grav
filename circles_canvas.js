@@ -156,5 +156,5 @@ class Program {
     };
 };
 
-const program = new Program(300, 15, 85, 3);
+const program = new Program(350, 15, 85, 3);
 program.run();
