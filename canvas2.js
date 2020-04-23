@@ -18,12 +18,12 @@ addEventListener('resize', () => {
     canvas.width = innerWidth; 
     canvas.height = innerHeight;
 
-    init();
+    program.init();
 }); 
 
 document.addEventListener('keyup', (e) => {
     if (e.code === 'Space') {
-        init();
+        program.init();
     }
 });
 
@@ -83,8 +83,10 @@ class Circle {
     };
 };
 
-class Config {
+class Program {
     constructor(numCircles, minRad, maxRad, speed) {
+        this.circles = []; // array of all circles
+
         this.numCircles = numCircles; 
 
         this.rad = minRad; 
@@ -106,9 +108,12 @@ class Config {
             ['#8B1E3F', '#3C153B', '#89BD9E', '#F0C987', '#DB4C40'],
             ['#272838', '#F3DE8A', '#EB9486', '#7E7F9A', '#F9F8F8'],
             ['#931621', '#28464B', '#326771', '#2C8C99', '#42D9C8'],
-            ['#EAC435', '#345995', '#03CEA4', '#FB4D3D', '#CA1551']
+            ['#EAC435', '#345995', '#03CEA4', '#FB4D3D', '#CA1551'],
         ]; 
-        this.colorArray = this.colorPalettes[Math.floor(Math.random() * this.colorPalettes.length)];
+
+        this.circle = this.circle.bind(this);
+        this.init = this.init.bind(this);
+        this.animate = this.animate.bind(this);
     };
 
     circle() {
@@ -124,29 +129,32 @@ class Config {
         });
     };
 
-    colors() {
-        return (this.colorArray[Math.floor(Math.random() * this.colorArray.length)]);
-    }; 
-};
+    init() {
+        this.circles = []; 
+        this.colorArray = this.colorPalettes[Math.floor(Math.random() * this.colorPalettes.length)];
+        const randomColor = (colorArray) => {
+            return(colorArray[Math.floor(Math.random() * this.colorArray.length)])
+        };
 
-let circles = []; 
-const init = () => {
-    circles = []; 
-    const config = new Config(100, 15, 85, 6);
+        for(let i = 0; i < this.numCircles; i++) {
+            this.circles.push(new Circle(this.circle().x, this.circle().y, this.circle().vel.x, this.circle().vel.y, this.circle().minRad, this.circle().maxRad, randomColor(this.colorArray)))
+        };
+    };
 
-    for (let i = 0; i < config.numCircles; i++) {
-        circles.push(new Circle(config.circle().x, config.circle().y, config.circle().vel.x, config.circle().vel.y, config.circle().minRad, config.circle().maxRad, config.colors()))
+    animate() {
+        requestAnimationFrame(this.animate); 
+        c.clearRect(0, 0, innerWidth, innerHeight); 
+
+        for(let i = 0; i < this.circles.length; i++) {
+            this.circles[i].update()
+        };
+    };
+
+    run() {
+        this.init();
+        this.animate();
     };
 };
-init(); // first init 
 
-const animate = () => {
-    requestAnimationFrame(animate);
-    c.clearRect(0, 0, innerWidth, innerHeight);
-
-    for(let i = 0; i < circles.length; i++) {
-        circles[i].update();
-    };
-};
-animate();
-
+const program = new Program(300, 15, 85, 3);
+program.run();
