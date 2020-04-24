@@ -9,24 +9,34 @@
 </head>
 <body style='margin: 0;'>
     <canvas class='circle-canvas' style='background-color: #121212;'></canvas>
-    <script src='circles_canvas.js'></script>
     
     <div class='controls-container'>
         <div class='sliders-container'>
             <div class='num-circles-wrapper'>
-                <input type="range" min='1' max='100' value='1' id='num-circles-range'>
+                <label class='range-label'>Number of Circles:
+                    <input type="range" min='1' max='100' value='1' id='num-circles-range'>
+                </label>
             </div>
             <div class='min-rad-wrapper'>
-                <input type="range" min='1' max='100' value='1' id='min-rad-range'>
+                <label class='range-label'>Minimum Radius:
+                    <input type="range" min='1' max='100' value='1' id='min-rad-range'>
+                </label>
             </div>
             <div class='max-rad-wrapper'>
-                <input type="range" min='1' max='100' value='1' id='max-rad-range'>
+                <label class='range-label'>Maximum Radius: 
+                    <input type="range" min='1' max='100' value='1' id='max-rad-range'>
+                </label>
             </div>
             <div class='speed-wrapper'>
-                <input type="range" min='1' max='100' value='1' id='speed-range'>
+                <label class='range-label'>Speed: 
+                    <input type="range" min='1' max='100' value='1' id='speed-range'>
+                </label>
             </div>
+            
+            <button id='range-submit'></button>
         </div>
-
+        
     </div>
+    <script src='circles_canvas.js'></script>
 </body>
 </html>

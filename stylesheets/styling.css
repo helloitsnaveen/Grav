@@ -17,19 +17,26 @@
 
 .sliders-container {
     display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 
     height: 12vw; 
     width: 90vw;
 
-    border: 1px solid white;
+    border: 5px solid #212121;
 
     border-radius: 4px;
     transition-duration: 1s;
 }
 
 .sliders-container:hover {
-    border: 1px solid white;
+    border: 5px solid black;
     
     border-radius: 10px;
     transition-duration: 1s;
+}
+
+.range-label {
+    color: white;
+    font-family: 'Courier New', Courier, monospace
 }
