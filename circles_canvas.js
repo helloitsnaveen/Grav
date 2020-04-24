@@ -3,6 +3,7 @@ const c = canvas.getContext('2d');
 
 canvas.width = window.innerWidth; 
 canvas.height = 80/100 * window.innerHeight;
+
 const mouse = {
     x: undefined,
     y: undefined,
@@ -179,11 +180,12 @@ document.addEventListener('keyup', (e) => {
 
 const ranges = document.getElementsByClassName('range-sliders');
 for(let i = 0; i < ranges.length; i++) {
-    ranges[i].addEventListener('oninput', () => {
+    ranges[i].addEventListener('mouseup', () => {
         console.log('range')
         beginProgram();
     })
 };
+
 
 
 beginProgram();
