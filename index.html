@@ -4,19 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSProject</title>
-    <style type='text/css'>
-        canvas {
-            border: 1px solid black;
-            background-color: black;
-        }
-
-        body {
-            margin: 0;
-        }
-    </style>
+    <!-- <link href="styles.css" type='text/css' rel="stylesheet" /> -->
+    <link rel="stylesheet" href="stylesheets/styling.css" type="text/css">
 </head>
-<body>
-    <canvas></canvas>
+<body style='margin: 0;'>
+    <canvas class='circle-canvas' style='background-color: #121212;'></canvas>
     <script src='circles_canvas.js'></script>
+    
+    <div class='controls-container'>
+        <div class='sliders-container'>
+            <div class='num-circles-wrapper'>
+                <input type="range" min='1' max='100' value='1' id='num-circles-range'>
+            </div>
+            <div class='min-rad-wrapper'>
+                <input type="range" min='1' max='100' value='1' id='min-rad-range'>
+            </div>
+            <div class='max-rad-wrapper'>
+                <input type="range" min='1' max='100' value='1' id='max-rad-range'>
+            </div>
+            <div class='speed-wrapper'>
+                <input type="range" min='1' max='100' value='1' id='speed-range'>
+            </div>
+        </div>
+
+    </div>
 </body>
 </html>

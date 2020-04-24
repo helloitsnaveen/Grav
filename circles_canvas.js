@@ -2,7 +2,7 @@ const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
 canvas.width = window.innerWidth; 
-canvas.height = window.innerHeight;
+canvas.height = 80/100 * window.innerHeight;
 
 const mouse = {
     x: undefined, 
@@ -16,7 +16,7 @@ addEventListener('mousemove', e => {
 
 addEventListener('resize', () => {
     canvas.width = innerWidth; 
-    canvas.height = innerHeight;
+    canvas.height = 80/100 * innerHeight;
 
     program.init();
 }); 
@@ -28,7 +28,7 @@ document.addEventListener('keyup', (e) => {
 });
 
 class Circle {
-    constructor(posx, posy, dx, dy, minRad, maxRad, color) {
+    constructor(posx, posy, dx, dy, minRad, maxRad, fillColor) {
         this.posx = posx; 
         this.posy = posy; 
 
@@ -41,15 +41,15 @@ class Circle {
         this.minRad = minRad; 
         this.maxRad = maxRad; 
 
-        this.color = color;
+        this.fillColor = fillColor;
     };
 
     draw() {
         c.beginPath(); 
         c.arc(this.posx, this.posy, this.rad, 0, Math.PI * 2, false);
 
-        c.fillStyle = this.color; 
-        c.strokeStyle = this.color; 
+        c.fillStyle = this.fillColor; 
+        c.strokeStyle = this.fillColor;
 
         c.fill();
         c.stroke();
@@ -61,7 +61,7 @@ class Circle {
             this.vel.x = -this.vel.x;
         }; 
 
-        if (this.posy + this.rad > innerHeight || this.posy - this.rad < 0) {
+        if (this.posy + this.rad > (80/100 * innerHeight) || this.posy - this.rad < 0) {
             this.vel.y = -this.vel.y;
         };
 
@@ -119,7 +119,7 @@ class Program {
     circle() {
         return ({
             x: Math.random() * (innerWidth - this.rad * 2) + this.rad, 
-            y: Math.random() * (innerHeight - this.rad * 2) + this.rad,
+            y: Math.random() * ((80/100 * innerHeight) - this.rad * 2) + this.rad,
             vel: {
                 x: (Math.random() - 0.5) * this.speed, 
                 y: (Math.random() - 0.5) * this.speed,
@@ -143,7 +143,7 @@ class Program {
 
     animate() {
         requestAnimationFrame(this.animate); 
-        c.clearRect(0, 0, innerWidth, innerHeight); 
+        c.clearRect(0, 0, innerWidth, (80/100 * innerHeight)); 
 
         for(let i = 0; i < this.circles.length; i++) {
             this.circles[i].update()
@@ -156,5 +156,8 @@ class Program {
     };
 };
 
-const program = new Program(350, 15, 85, 3);
+
+// final creation of run program, with parameters.
+// numCircles, minRad, maxRad, speed
+const program = new Program(1, 15, 85, 3);
 program.run();
