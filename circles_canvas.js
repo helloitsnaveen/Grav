@@ -3,29 +3,14 @@ const c = canvas.getContext('2d');
 
 canvas.width = window.innerWidth; 
 canvas.height = 80/100 * window.innerHeight;
-
 const mouse = {
-    x: undefined, 
+    x: undefined,
     y: undefined,
-}; 
+};
 
 addEventListener('mousemove', e => {
     mouse.x = e.x;
     mouse.y = e.y;
-});
-
-addEventListener('resize', () => {
-    canvas.width = innerWidth; 
-    canvas.height = 80/100 * innerHeight;
-
-
-    program.init();
-}); 
-
-document.addEventListener('keyup', (e) => {
-    if (e.code === 'Space') {
-        program.init();
-    }
 });
 
 class Circle {
@@ -157,33 +142,48 @@ class Program {
     };
 };
 
-// document.getElementById('range-submit').onClick = () => {
-//     // const numCircles = document.getElementById('num-circles-range').value;
-//     // const minRad = document.getElementById('min-rad-range').value;
-//     // const maxRad = document.getElementById('max-rad-range').value;
-//     // const speedRange = document.getElementById('speed-range').value;
-
-//     // const program = new Program(numCircles, minRad, maxRad, speedRange);
-//     // program.init();
-//     // program.run();
-
-//     console.log('button works');
-// };
-
-
 // final creation of run program, with parameters.
 // numCircles, minRad, maxRad, speed
-const program = new Program(10, 15, 85, 3);
-console.log(program);
-program.run();
+// const program = new Program(10, 15, 85, 3);
+// console.log(program);
+// program.run();
 
-document.getElementById('range-submit').addEventListener('click', () => {
+const beginProgram = () => {
     const numCircles = parseInt(document.getElementById('num-circles-range').value);
     const minRad = parseInt(document.getElementById('min-rad-range').value);
     const maxRad = parseInt(document.getElementById('max-rad-range').value);
     const speedRange = parseInt(document.getElementById('speed-range').value);
 
     const userProgram = new Program(numCircles, minRad, maxRad, speedRange);
-    console.log(userProgram);
     userProgram.run();
+};
+
+document.getElementById('range-submit').addEventListener('click', () => {
+    beginProgram();
+    // console.log('log');
 });
+
+addEventListener('resize', () => {
+    canvas.width = innerWidth;
+    canvas.height = 80 / 100 * innerHeight;
+
+
+    beginProgram();
+});
+
+document.addEventListener('keyup', (e) => {
+    if (e.code === 'Space') {
+        beginProgram();
+    }
+});
+
+const ranges = document.getElementsByClassName('range-sliders');
+for(let i = 0; i < ranges.length; i++) {
+    ranges[i].addEventListener('oninput', () => {
+        console.log('range')
+        beginProgram();
+    })
+};
+
+
+beginProgram();
