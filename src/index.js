@@ -1,16 +1,18 @@
+// Canvas Setup //
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
 canvas.width = window.innerWidth; 
 canvas.height = 80/100 * window.innerHeight;
 
-function randomIntFromRange(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
+// Initial Helper Objects, Functions, and Event Listeners // 
 const mouse = {
     x: undefined,
     y: undefined,
+};
+
+function randomIntFromRange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 addEventListener('mousemove', e => {
@@ -18,6 +20,7 @@ addEventListener('mousemove', e => {
     mouse.y = e.y;
 });
 
+// Main Circle Class //
 class Circle {
     constructor(posx, posy, dx, dy, minRad, maxRad, fillColor) {
         this.posx = posx; 
@@ -48,7 +51,7 @@ class Circle {
     }; 
 
 
-    // old update
+    // fka update()
     float() {
         if (this.posx + this.rad > innerWidth || this.posx - this.rad < 0) {
             this.vel.x = -this.vel.x;
@@ -77,21 +80,22 @@ class Circle {
 
     gravity(gravity, friction) {
         if (this.posy + this.minRad >= (80/100 * innerHeight) && this.vel.y >= 0) {
-            this.vel.y = -this.vel.y * friction
+            this.vel.y = -this.vel.y * friction;
         } else {
-            this.vel.y += gravity
-        }
+            this.vel.y += gravity;
+        };
 
         if (this.posx + this.minRad + this.vel.x > innerWidth || this.posx - this.minRad <= 0) {
-            this.vel.x = -this.vel.x
+            this.vel.x = -this.vel.x;
         };
 
         this.posx += this.vel.x;
         this.posy += this.vel.y;
-        this.draw()
-    }
+        this.draw();
+    };
 };
 
+// Main Program Class //
 class Program {
     constructor(numCircles, minRad, maxRad, speed) {
         this.circles = []; // array of all circles
@@ -170,11 +174,8 @@ class Program {
             this.circles.push(new Circle(x, y, dx, dy, radius, radius, randomColor(this.colorArray)))
         };
 
-        // for (let i = 0; i < this.numCircles; i++) {
-        //     // this.circles.push(new Circle(this.circle().x, this.circle().y, this.circle().vel.x, this.circle.vel.y, this.circle().minRad, this.circle().maxRad, randomColor(this.colorArray)))
-        // };
-
-        console.log(this.circles);
+        // log of circles array
+        // console.log(this.circles); 
     };
 
     floatAnimate() {
@@ -208,15 +209,14 @@ class Program {
     run() {
         // this.gravityRun();
         // this.floatRun();
+
+        // figure out how to use same circles array, all circles should both bounce and expand
     }
 };
 
-// final creation of run program, with parameters.
-// numCircles, minRad, maxRad, speed
-// const program = new Program(10, 15, 85, 3);
-// console.log(program);
-// program.run();
+// Main Executables and Event Listeners //
 
+// Main execute function, pass as callback as needed.
 const beginProgram = () => {
     const numCircles = parseInt(document.getElementById('num-circles-range').value);
     const minRad = parseInt(document.getElementById('min-rad-range').value);
@@ -227,6 +227,7 @@ const beginProgram = () => {
     userProgram.gravityRun();
 };
 
+// Execute upon range input changes, doesn't work with keyboard change
 document.getElementById('range-submit').addEventListener('click', () => {
     beginProgram();
 });
