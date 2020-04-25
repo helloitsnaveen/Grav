@@ -4,6 +4,10 @@ const c = canvas.getContext('2d');
 canvas.width = window.innerWidth; 
 canvas.height = 80/100 * window.innerHeight;
 
+function randomIntFromRange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 const mouse = {
     x: undefined,
     y: undefined,
@@ -43,7 +47,9 @@ class Circle {
         c.closePath();
     }; 
 
-    update() {
+
+    // old update
+    float() {
         if (this.posx + this.rad > innerWidth || this.posx - this.rad < 0) {
             this.vel.x = -this.vel.x;
         }; 
@@ -68,6 +74,22 @@ class Circle {
 
         this.draw();
     };
+
+    gravity(gravity, friction) {
+        if (this.posy + this.minRad >= (80/100 * innerHeight) && this.vel.y >= 0) {
+            this.vel.y = -this.vel.y * friction
+        } else {
+            this.vel.y += gravity
+        }
+
+        if (this.posx + this.minRad + this.vel.x > innerWidth || this.posx - this.minRad <= 0) {
+            this.vel.x = -this.vel.x
+        };
+
+        this.posx += this.vel.x;
+        this.posy += this.vel.y;
+        this.draw()
+    }
 };
 
 class Program {
@@ -99,8 +121,10 @@ class Program {
         ]; 
 
         this.circle = this.circle.bind(this);
-        this.init = this.init.bind(this);
-        this.animate = this.animate.bind(this);
+        this.floatInit = this.floatInit.bind(this);
+        this.gravityInit = this.gravityInit.bind(this);
+        this.floatAnimate = this.floatAnimate.bind(this);
+        this.gravityAnimate = this.gravityAnimate.bind(this);
     };
 
     circle() {
@@ -116,7 +140,7 @@ class Program {
         });
     };
 
-    init() {
+    floatInit() {
         this.circles = []; 
         this.colorArray = this.colorPalettes[Math.floor(Math.random() * this.colorPalettes.length)];
         const randomColor = (colorArray) => {
@@ -128,19 +152,63 @@ class Program {
         };
     };
 
-    animate() {
-        requestAnimationFrame(this.animate); 
+    gravityInit() {
+        this.circles = []
+        this.colorArray = this.colorPalettes[Math.floor(Math.random() * this.colorPalettes.length)];
+        console.log(this.colorArray);
+        const randomColor = colorArray => {
+            return(colorArray[Math.floor(Math.random() * this.colorArray.length)])
+        };
+
+        for (let i = 0; i < this.numCircles; i++) {
+            const radius = randomIntFromRange(8, 20);
+            const x = randomIntFromRange(0, canvas.width - 30);
+            const y = randomIntFromRange(0, canvas.height - 100);
+
+            const dx = randomIntFromRange(-2, 2);
+            const dy = randomIntFromRange(-2, 2);
+            this.circles.push(new Circle(x, y, dx, dy, radius, radius, randomColor(this.colorArray)))
+        };
+
+        // for (let i = 0; i < this.numCircles; i++) {
+        //     // this.circles.push(new Circle(this.circle().x, this.circle().y, this.circle().vel.x, this.circle.vel.y, this.circle().minRad, this.circle().maxRad, randomColor(this.colorArray)))
+        // };
+
+        console.log(this.circles);
+    };
+
+    floatAnimate() {
+        requestAnimationFrame(this.floatAnimate); 
         c.clearRect(0, 0, innerWidth, (80/100 * innerHeight)); 
 
         for(let i = 0; i < this.circles.length; i++) {
-            this.circles[i].update()
+            this.circles[i].float()
         };
     };
 
-    run() {
-        this.init();
-        this.animate();
+    gravityAnimate() {
+        requestAnimationFrame(this.gravityAnimate); 
+        c.clearRect(0, 0, innerWidth, (80/100 * innerHeight)); 
+
+        for(let i = 0; i < this.circles.length; i++) {
+            this.circles[i].gravity(this.speed, 0.9)
+        };
     };
+
+    floatRun() {
+        this.floatInit();
+        this.floatAnimate();
+    };
+
+    gravityRun() {
+        this.gravityInit();
+        this.gravityAnimate();
+    };
+
+    run() {
+        // this.gravityRun();
+        // this.floatRun();
+    }
 };
 
 // final creation of run program, with parameters.
@@ -156,18 +224,16 @@ const beginProgram = () => {
     const speedRange = parseInt(document.getElementById('speed-range').value);
 
     const userProgram = new Program(numCircles, minRad, maxRad, speedRange);
-    userProgram.run();
+    userProgram.gravityRun();
 };
 
 document.getElementById('range-submit').addEventListener('click', () => {
     beginProgram();
-    // console.log('log');
 });
 
 addEventListener('resize', () => {
     canvas.width = innerWidth;
     canvas.height = 80 / 100 * innerHeight;
-
 
     beginProgram();
 });
@@ -185,7 +251,5 @@ for(let i = 0; i < ranges.length; i++) {
         beginProgram();
     })
 };
-
-
 
 beginProgram();
