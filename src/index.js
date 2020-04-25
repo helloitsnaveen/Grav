@@ -43,7 +43,7 @@ class Circle {
         c.arc(this.posx, this.posy, this.rad, 0, Math.PI * 2, false);
 
         c.fillStyle = this.fillColor; 
-        c.strokeStyle = this.fillColor;
+        c.strokeStyle = 'black';
 
         c.fill();
         c.stroke();
@@ -159,7 +159,6 @@ class Program {
     gravityInit() {
         this.circles = []
         this.colorArray = this.colorPalettes[Math.floor(Math.random() * this.colorPalettes.length)];
-        console.log(this.colorArray);
         const randomColor = colorArray => {
             return(colorArray[Math.floor(Math.random() * this.colorArray.length)])
         };
@@ -217,7 +216,7 @@ class Program {
 // Main Executables and Event Listeners //
 
 // Main execute function, pass as callback as needed.
-const beginProgram = () => {
+const gravityProgram = () => {
     const numCircles = parseInt(document.getElementById('num-circles-range').value);
     const minRad = parseInt(document.getElementById('min-rad-range').value);
     const maxRad = parseInt(document.getElementById('max-rad-range').value);
@@ -227,30 +226,39 @@ const beginProgram = () => {
     userProgram.gravityRun();
 };
 
+const floatProgram = () => {
+    const numCircles = parseInt(document.getElementById('num-circles-range').value);
+    const minRad = parseInt(document.getElementById('min-rad-range').value);
+    const maxRad = parseInt(document.getElementById('max-rad-range').value);
+    const speedRange = parseInt(document.getElementById('speed-range').value);
+
+    const userProgram = new Program(numCircles, minRad, maxRad, speedRange);
+    userProgram.floatRun();
+};
+
 // Execute upon range input changes, doesn't work with keyboard change
 document.getElementById('range-submit').addEventListener('click', () => {
-    beginProgram();
+    gravityProgram();
 });
 
 addEventListener('resize', () => {
     canvas.width = innerWidth;
     canvas.height = 80 / 100 * innerHeight;
 
-    beginProgram();
+    gravityProgram();
 });
 
 document.addEventListener('keyup', (e) => {
     if (e.code === 'Space') {
-        beginProgram();
+        gravityProgram();
     }
 });
 
 const ranges = document.getElementsByClassName('range-sliders');
 for(let i = 0; i < ranges.length; i++) {
     ranges[i].addEventListener('mouseup', () => {
-        console.log('range')
-        beginProgram();
+        gravityProgram();
     })
 };
 
-beginProgram();
+floatProgram();
