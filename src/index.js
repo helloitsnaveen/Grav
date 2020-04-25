@@ -213,7 +213,8 @@ class Program {
         // this.gravityRun();
         // this.floatRun();
 
-        // figure out how to use same circles array, all circles should both bounce and expand
+        //-- figure out how to use same circles array, all circles should both bounce and expand
+        // ^ Done, left for future purposes 
     }
 };
 
@@ -252,40 +253,31 @@ addEventListener('resize', () => {
     floatProgram();
 });
 
-// document.addEventListener('keyup', (e) => {
-//     if (gravity && e.code === 'Space') {
-//         numCircles = parseInt(document.getElementById('num-circles-range').value);
-//         minRad = parseInt(document.getElementById('min-rad-range').value);
-//         maxRad = parseInt(document.getElementById('max-rad-range').value);
-//         speedRange = 1;
-
-//         userProgram.clear();
-//         floatProgram();
-//         gravity = false;
-//         console.log('back to float');
-//     } else if (e.code === 'Space' && !gravity) {
-//         speedRange = parseInt(document.getElementById('speed-range').value);
-
-//         gravityProgram();
-//         gravity = true; 
-//         console.log('over to gravity');
-//     };
-// });
-
-// document.addEventListener('keyup', (e) => {
-//     if (!gravity)
-// })
-
 document.addEventListener('keyup', (e) => {
-    if (e.code === 'KeyT') {
-        numCircles = parseInt(document.getElementById('num-circles-range').value);
-        minRad = parseInt(document.getElementById('min-rad-range').value);
-        maxRad = parseInt(document.getElementById('max-rad-range').value);
-        speedRange = parseInt(document.getElementById('speed-range').value);
+    // Space to DROP, and GRAV
+    if (e.code === 'Space' && gravity) {
+        //
+    } else if (e.code === 'Space' && !gravity) {
+        gravityProgram();
+        gravity = true;
+    };
 
+    // Key R to RESTART
+    if (e.code === 'KeyR') {
+        // userProgram.clear();
+        // numCircles = parseInt(document.getElementById('num-circles-range').value);
+        // minRad = parseInt(document.getElementById('min-rad-range').value);
+        // maxRad = parseInt(document.getElementById('max-rad-range').value);
+        // speedRange = parseInt(document.getElementById('speed-range').value);
+
+        // floatProgram();
+        window.location.reload(false); 
+    };
+
+    // Key C to CLEAR
+    if (e.code === 'KeyC') {
         userProgram.clear();
-        floatProgram();
-    }
+    };
 });
 
 const ranges = document.getElementsByClassName('range-sliders');
