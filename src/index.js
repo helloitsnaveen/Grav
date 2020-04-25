@@ -144,8 +144,12 @@ class Program {
         });
     };
 
+    // use this to clear screen
+    clear() {
+        this.circles = [];
+    };
+
     floatInit() {
-        this.circles = []; 
         this.colorArray = this.colorPalettes[Math.floor(Math.random() * this.colorPalettes.length)];
         const randomColor = (colorArray) => {
             return(colorArray[Math.floor(Math.random() * this.colorArray.length)])
@@ -157,7 +161,6 @@ class Program {
     };
 
     gravityInit() {
-        this.circles = []
         this.colorArray = this.colorPalettes[Math.floor(Math.random() * this.colorPalettes.length)];
         const randomColor = colorArray => {
             return(colorArray[Math.floor(Math.random() * this.colorArray.length)])
@@ -191,7 +194,8 @@ class Program {
         c.clearRect(0, 0, innerWidth, (80/100 * innerHeight)); 
 
         for(let i = 0; i < this.circles.length; i++) {
-            this.circles[i].gravity(this.speed, 0.9)
+            // this.circles[i].gravity(this.speed, 0.9) // acceleration here
+            this.circles[i].gravity(0.5, 1) // acceleration here
         };
     };
 
@@ -201,7 +205,7 @@ class Program {
     };
 
     gravityRun() {
-        this.gravityInit();
+        // this.gravityInit();
         this.gravityAnimate();
     };
 
@@ -209,32 +213,33 @@ class Program {
         // this.gravityRun();
         // this.floatRun();
 
-        // figure out how to use same circles array, all circles should both bounce and expand
+        //-- figure out how to use same circles array, all circles should both bounce and expand
+        // ^ Done, left for future purposes 
     }
 };
 
 // Main Executables and Event Listeners //
 
 // Main execute function, pass as callback as needed.
-const gravityProgram = () => {
-    const numCircles = parseInt(document.getElementById('num-circles-range').value);
-    const minRad = parseInt(document.getElementById('min-rad-range').value);
-    const maxRad = parseInt(document.getElementById('max-rad-range').value);
-    const speedRange = parseInt(document.getElementById('speed-range').value);
+let numCircles = parseInt(document.getElementById('num-circles-range').value);
+let minRad = parseInt(document.getElementById('min-rad-range').value);
+let maxRad = parseInt(document.getElementById('max-rad-range').value);
+let speedRange = parseInt(document.getElementById('speed-range').value);
 
-    const userProgram = new Program(numCircles, minRad, maxRad, speedRange);
+let userProgram = new Program(numCircles, minRad, maxRad, speedRange);
+
+let gravity = false; 
+
+const gravityProgram = () => {
     userProgram.gravityRun();
+    gravity = true; 
 };
 
 const floatProgram = () => {
-    const numCircles = parseInt(document.getElementById('num-circles-range').value);
-    const minRad = parseInt(document.getElementById('min-rad-range').value);
-    const maxRad = parseInt(document.getElementById('max-rad-range').value);
-    const speedRange = parseInt(document.getElementById('speed-range').value);
-
-    const userProgram = new Program(numCircles, minRad, maxRad, speedRange);
     userProgram.floatRun();
+    gravity = false; 
 };
+
 
 // Execute upon range input changes, doesn't work with keyboard change
 document.getElementById('range-submit').addEventListener('click', () => {
@@ -245,20 +250,53 @@ addEventListener('resize', () => {
     canvas.width = innerWidth;
     canvas.height = 80 / 100 * innerHeight;
 
-    gravityProgram();
+    floatProgram();
 });
 
 document.addEventListener('keyup', (e) => {
-    if (e.code === 'Space') {
+    // Space to DROP, and GRAV
+    if (e.code === 'Space' && gravity) {
+        //
+    } else if (e.code === 'Space' && !gravity) {
         gravityProgram();
-    }
+        gravity = true;
+    };
+
+    // Key R to RESTART
+    if (e.code === 'KeyR') {
+        // userProgram.clear();
+        // numCircles = parseInt(document.getElementById('num-circles-range').value);
+        // minRad = parseInt(document.getElementById('min-rad-range').value);
+        // maxRad = parseInt(document.getElementById('max-rad-range').value);
+        // speedRange = parseInt(document.getElementById('speed-range').value);
+
+        // floatProgram();
+        window.location.reload(false); 
+    };
+
+    // Key C to CLEAR
+    if (e.code === 'KeyC') {
+        userProgram.clear();
+    };
 });
 
 const ranges = document.getElementsByClassName('range-sliders');
 for(let i = 0; i < ranges.length; i++) {
     ranges[i].addEventListener('mouseup', () => {
-        gravityProgram();
+        userProgram.clear();
+        console.log(numCircles)
+        console.log(document.getElementById('num-circles-range').value)
+
+        numCircles = parseInt(document.getElementById('num-circles-range').value);
+        minRad = parseInt(document.getElementById('min-rad-range').value);
+        maxRad = parseInt(document.getElementById('max-rad-range').value);
+        speedRange = parseInt(document.getElementById('speed-range').value);
+        
+        userProgram = new Program(numCircles, minRad, maxRad, speedRange);
+        floatProgram();
     })
 };
 
-floatProgram();
+window.onload = () => {
+    floatProgram();
+};
